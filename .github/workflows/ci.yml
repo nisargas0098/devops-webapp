@@ -22,3 +22,16 @@ jobs:
       - name: Show Timestamp
         run: date
 
+      - name: Notify Slack - Success
+        if: success()
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+          --data '{"text":"✅ CI Build Successful!"}' \
+          ${{ secrets.SLACK_WEBHOOK }}
+
+      - name: Notify Slack - Failure
+        if: failure()
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+          --data '{"text":"❌ CI Build Failed!"}' \
+          ${{ secrets.SLACK_WEBHOOK }}
